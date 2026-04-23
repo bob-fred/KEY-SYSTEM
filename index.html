@@ -89,8 +89,8 @@ async function buy(){
 
   let orderID = generateID();
 
-  // 🔧 À REMPLACER (TON BACKEND RENDER)
-  await fetch("https://key-system-3ny0.onrender.com/create-order", {
+  // 📦 ENVOI AU BACKEND (Render)
+  fetch("https://key-system-3ny0.onrender.com/create-order", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
@@ -99,9 +99,9 @@ async function buy(){
       discord,
       product
     })
-  });
+  }).catch(()=>{});
 
-  // 💳 PAYPAL LINKS (TU PEUX LES GARDER)
+  // 💳 REDIRECTION PAYPAL
   if(product === "MAX"){
     window.location.href = "https://www.paypal.com/ncp/payment/QDADATH3NGWX6";
   }
