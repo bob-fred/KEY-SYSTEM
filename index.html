@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <title>BloxAccShop</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
 <style>
 body{
   margin:0;
-  background: radial-gradient(circle at top, #1e293b, #0f172a);
+  font-family:Arial;
+  background:#0f172a;
   color:white;
-  font-family: 'Inter', sans-serif;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -19,17 +17,11 @@ body{
 }
 
 .card{
-  background: rgba(30, 41, 59, 0.9);
+  background:#1e293b;
   padding:40px;
-  border-radius:18px;
-  width:360px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  border-radius:15px;
+  width:350px;
   text-align:center;
-}
-
-h1{
-  font-size:22px;
-  margin-bottom:20px;
 }
 
 input, select{
@@ -38,36 +30,23 @@ input, select{
   margin:8px 0;
   border-radius:10px;
   border:none;
-  outline:none;
   background:#0f172a;
   color:white;
 }
 
-input::placeholder{
-  color:#94a3b8;
-}
-
 button{
   width:100%;
-  padding:14px;
-  margin-top:12px;
+  padding:12px;
+  margin-top:10px;
   border:none;
   border-radius:10px;
-  background:linear-gradient(90deg,#22c55e,#16a34a);
-  color:white;
-  font-weight:700;
+  background:#22c55e;
+  font-weight:bold;
   cursor:pointer;
-  transition:0.2s;
 }
 
 button:hover{
-  transform:scale(1.03);
-}
-
-.small{
-  font-size:12px;
-  color:#94a3b8;
-  margin-top:10px;
+  background:#16a34a;
 }
 </style>
 </head>
@@ -76,22 +55,18 @@ button:hover{
 
 <div class="card">
 
-<h1>🛒 BloxAccShop</h1>
+<h2>🛒 BloxAccShop</h2>
 
 <input id="pseudo" placeholder="Pseudo Roblox">
 <input id="discord" placeholder="@Discord">
 
 <select id="product">
-  <option value="MAX">⚡ Max Level</option>
-  <option value="SEA3">🌊 Sea 3</option>
-  <option value="SEA2">🌴 Sea 2</option>
+  <option value="MAX">Max Level</option>
+  <option value="SEA3">Sea 3</option>
+  <option value="SEA2">Sea 2</option>
 </select>
 
-<button onclick="buy()">Acheter maintenant</button>
-
-<div class="small">
-Paiement sécurisé via PayPal
-</div>
+<button onclick="buy()">Acheter</button>
 
 </div>
 
@@ -114,7 +89,8 @@ async function buy(){
 
   let orderID = generateID();
 
-  await fetch("https://TON-SITE.onrender.com/create-order", {
+  // 🔧 À REMPLACER (TON BACKEND RENDER)
+  await fetch("https://key-system-3ny0.onrender.com/create-order", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
@@ -125,6 +101,7 @@ async function buy(){
     })
   });
 
+  // 💳 PAYPAL LINKS (TU PEUX LES GARDER)
   if(product === "MAX"){
     window.location.href = "https://www.paypal.com/ncp/payment/QDADATH3NGWX6";
   }
