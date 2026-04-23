@@ -4,39 +4,44 @@ const fetch = require("node-fetch");
 const app = express();
 app.use(express.json());
 
+// 🔐 WEBHOOK DISCORD (mets ton nouveau ici)
 const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1496843404762419232/jzeLP_4B0FIcnmhxhscnGpySoUMKhItYBAFayOWzGa1YRCxFmYYLEt2hgad0DFwXdNv8";
 
-// stock commandes
-let orders = {};
-
-// recevoir commande depuis site
-app.post("/create-order", (req, res) => {
-  const { orderID, pseudo, discord, product } = req.body;
-
-  orders[orderID] = { pseudo, discord, product };
-
-  res.json({ ok: true });
+// 🟢 test serveur
+app.get("/", (req, res) => {
+  res.send("Server OK");
 });
 
-// webhook PayPal
+// 📦 recevoir commande site
+app.post("/create-order", (req, res) => {
+  const data = req.body;
+
+  console.log("Nouvelle commande :", data);
+
+  res.json({ success: true });
+});
+
+// 💳 webhook PayPal
 app.post("/paypal-webhook", async (req, res) => {
   const event = req.body;
 
+  console.log("PayPal event:", event);
+
   if (event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
 
-    const orderID = event.resource?.custom_id;
-    const order = orders[orderID];
+    const email = event.resource?.payer?.email_address || "Unknown";
+    const amount = event.resource?.amount?.value || "Unknown";
+    const customID = event.resource?.custom_id || "Unknown";
 
     await fetch(DISCORD_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         content:
-`💸 PAYPAL PAIEMENT
-👤 Pseudo: ${order?.pseudo}
-💬 Discord: ${order?.discord}
-📦 Produit: ${order?.product}
-💰 Montant: ${event.resource?.amount?.value}`
+`💸 PAIEMENT CONFIRMÉ
+🆔 Order: ${customID}
+📧 Email: ${email}
+💰 Montant: ${amount}`
       })
     });
 
@@ -45,4 +50,9 @@ app.post("/paypal-webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(3000);
+// 🚀 PORT RENDER OBLIGATOIRE
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server ON on port " + PORT);
+});
