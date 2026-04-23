@@ -48,6 +48,14 @@ button{
 button:hover{
   background:#16a34a;
 }
+
+.label{
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:4px;
+  margin-bottom:2px;
+  text-align:left;
+}
 </style>
 </head>
 
@@ -57,8 +65,13 @@ button:hover{
 
 <h2>🛒 BloxAccShop</h2>
 
-<input id="pseudo" placeholder="Pseudo Roblox">
-<input id="discord" placeholder="@Discord">
+<!-- TON PSEUDO -->
+<div class="label">Ton pseudo</div>
+<input id="pseudo" placeholder="Ex: Player123">
+
+<!-- PSEUDO COMPTE ACHAT -->
+<div class="label">Met le pseudo du compte que tu veux acheter</div>
+<input id="discord" placeholder="Ex: Account123">
 
 <select id="product">
   <option value="MAX">Max Level</option>
@@ -79,29 +92,27 @@ function generateID(){
 async function buy(){
 
   let pseudo = document.getElementById("pseudo").value;
-  let discord = document.getElementById("discord").value;
+  let account = document.getElementById("discord").value;
   let product = document.getElementById("product").value;
 
-  if(!pseudo || !discord){
+  if(!pseudo || !account){
     alert("Remplis tout !");
     return;
   }
 
   let orderID = generateID();
 
-  // 📦 ENVOI AU BACKEND (Render)
   fetch("https://key-system-3ny0.onrender.com/create-order", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
       orderID,
       pseudo,
-      discord,
+      account,
       product
     })
   }).catch(()=>{});
 
-  // 💳 REDIRECTION PAYPAL
   if(product === "MAX"){
     window.location.href = "https://www.paypal.com/ncp/payment/QDADATH3NGWX6";
   }
